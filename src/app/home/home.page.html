@@ -1,14 +1,43 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Ionic Blank
+      Trabalhos JAI
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
+  <div class="ion-padding"> <!--Filtros-->
+    <ion-list>
+      <ion-item>
+        <ion-label>Data</ion-label>
+        <ion-select [(ngModel)]="dateModel" placeholder="Selecione uma data" (ionChange)="filterTrabalhos()">
+          <ion-select-option *ngFor="let date of dates" value="{{date}}">{{date}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Local</ion-label>
+        <ion-select [(ngModel)]="locationModel" placeholder="Selecione um local" (ionChange)="filterTrabalhos()">
+          <ion-select-option *ngFor="let location of locations" value="{{location}}">{{location}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <ion-button color="primary" expand="block" (click)="clearFilter()">Limpar filtro</ion-button>
+  </div>
+  <div class="ion-padding"> <!--Lista de trabalhos-->
+    <h2>Lista de trabalhos</h2>
+    <ion-list>
+      <ion-item *ngFor="let trabalho of trabalhosFiltered">
+        <ion-label>
+          <h2>{{trabalho[3]}}</h2>
+          <h3>Apresentador: {{trabalho[4]}}</h3>
+          <h3>Avaliador: {{trabalho[0]}}</h3>
+          <p>{{trabalho[9]}} {{trabalho[10]}}</p>
+          <p>{{trabalho[7]}}  {{trabalho[8]}}</p>
+          <p *ngIf="trabalho[14] == true" style="color: lime;">Avaliado</p>
+          <p *ngIf="trabalho[14] == false" style="color: red;">Não Avaliado</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>
