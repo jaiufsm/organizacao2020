@@ -34,8 +34,9 @@
           <h3>Avaliador: {{trabalho[0]}}</h3>
           <p>{{trabalho[9]}} {{trabalho[10]}}</p>
           <p>{{trabalho[7]}}  {{trabalho[8]}}</p>
-          <p *ngIf="trabalho[14] == true" style="color: lime;">Avaliado</p>
-          <p *ngIf="trabalho[14] == false" style="color: red;">Não Avaliado</p>
+          <p *ngIf="trabalho[14] === 3" style="color: #32CD32;">Avaliado</p>
+          <p *ngIf="trabalho[14] === 1" style="color: #FF0000;">Não Avaliado</p>
+          <p *ngIf="trabalho[14] === 2" style="color: #FFA500;">Em Andamento</p>
         </ion-label>
       </ion-item>
     </ion-list>

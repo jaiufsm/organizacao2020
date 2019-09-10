@@ -26,9 +26,14 @@ export class GraficosPage implements OnInit {
         chartType: 'PieChart',
         dataTable: [
           ['Estado', 'Trabalhos'],
-          ['Avaliado', avaliacoes.filter(value => value === true).length],
-          ['Não Avaliado', avaliacoes.filter(value => value === false).length]
+          ['Avaliado', avaliacoes.filter(value => value === 3).length],
+          ['Não Avaliado', avaliacoes.filter(value => value === 1).length],
+          ['Em Andamento', avaliacoes.filter(value => value === 2).length]
         ],
+        options: {
+          width: 400,
+          colors: ['#32CD32', '#FF0000', '#FFA500']
+        }
       };
       this.avaliadoresChart = {
         chartType: 'PieChart',
@@ -39,6 +44,19 @@ export class GraficosPage implements OnInit {
         ]
       };
     });
+    /*this.trabalhosChart = {
+      chartType: 'PieChart',
+      dataTable: [
+        ['Estado', 'Trabalhos'],
+        ['Avaliado', 1500],
+        ['Não Avaliado', 3000],
+        ['Em Andamento', 1000]
+      ],
+      options: {
+        width: 400,
+        colors: ['#32CD32', '#FF0000', '#FFA500']
+      }
+    };*/
   }
 
 }
