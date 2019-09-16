@@ -30,25 +30,63 @@ export class HomePage implements OnInit {
       }
     );
     this.trabalhosFiltered = [...this.trabalhos];*/
-    this.updateTrabalhos();
+    this.updateDays();
   }
 
-  public updateTrabalhos() {
-    this.apiJai.getTrabalhos()
-    .subscribe((response: Response) => {
+  private updateDays() {
+    this.apiJai.getDays()
+    .then((response: Array<string>) => {
       console.log(response);
       if (response) {
-      this.trabalhos = response.values;
-      this.dates = response.values.map(value => value[7]).filter((value, index, self) => self.indexOf(value) === index).sort();
-      this.locations = response.values.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
-      this.filterTrabalhos();
+        this.dates = response;
+        this.dateModel = this.dates[0];
+        this.updateTrabalhos();
       }
     }, err => {
       console.log(err);
     });
   }
 
-  public filterTrabalhos() {
+  private updateTrabalhos() {
+    this.apiJai.getValuesByDay(this.dateModel)
+    .then((response: Array<Array<string>>) => {
+      console.log(response);
+      // let trabalhosResponse;
+      this.locations = response.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
+      this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<string>>) => {
+        console.log(avaliacoes);
+        console.log(response);
+        this.trabalhos = [];
+        for (const trabalho of response) {
+          if (avaliacoes.filter(avaliacao => avaliacao[0] === trabalho[2]).length > 0) {
+            trabalho.push('3');
+          } else {
+            trabalho.push('1');
+          }
+          this.trabalhos.push(trabalho);
+        }
+        console.log(this.trabalhos);
+        this.filterTrabalhos();
+      });
+    });
+  }
+
+ /* public updateTrabalhos() {
+    this.apiJai.getDays()
+    .subscribe((response: GetDaysResponse) => {
+      console.log(response);
+      if (response) {
+      this.dates = response.values;
+      // this.dates = response.values.map(value => value[7]).filter((value, index, self) => self.indexOf(value) === index).sort();
+      // this.locations = response.values.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
+      this.filterTrabalhos();
+      }
+    }, err => {
+      console.log(err);
+    });
+  }*/
+
+  /*public filterTrabalhos() {
     this.trabalhosFiltered = [...this.trabalhos];
     if (this.dateModel || this.locationModel) {
       this.trabalhosFiltered = this.trabalhosFiltered.filter((value) => {
@@ -63,27 +101,20 @@ export class HomePage implements OnInit {
         }
       });
     }
+  }*/
+
+  public filterTrabalhos() {
+    this.trabalhosFiltered = [...this.trabalhos];
+    if (this.locationModel) {
+      this.trabalhosFiltered = this.trabalhosFiltered.filter((value) => {
+        return value[9]  === this.locationModel;
+      });
+    }
   }
 
   public clearFilter() {
-    this.dateModel = null;
     this.locationModel = null;
     this.trabalhosFiltered = [...this.trabalhos];
   }
 
-}
-
-
-interface Trabalho {
-  titulo: string;
-  apresentador: string;
-  avaliador: string;
-  dia: string;
-  horario: string;
-  predio: string;
-  sala: string;
-}
-
-interface Response {
-  values: Array<Array<string>>;
 }

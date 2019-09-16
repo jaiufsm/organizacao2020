@@ -11,7 +11,7 @@
     <ion-list>
       <ion-item>
         <ion-label>Data</ion-label>
-        <ion-select [(ngModel)]="dateModel" placeholder="Selecione uma data" (ionChange)="filterTrabalhos()">
+        <ion-select [(ngModel)]="dateModel" placeholder="Selecione uma data" (ionChange)="updateTrabalhos()">
           <ion-select-option *ngFor="let date of dates" value="{{date}}">{{date}}</ion-select-option>
         </ion-select>
       </ion-item>
@@ -34,9 +34,9 @@
           <h3>Avaliador: {{trabalho[0]}}</h3>
           <p>{{trabalho[9]}} {{trabalho[10]}}</p>
           <p>{{trabalho[7]}}  {{trabalho[8]}}</p>
-          <p *ngIf="trabalho[14] === 3" style="color: #32CD32;">Avaliado</p>
-          <p *ngIf="trabalho[14] === 1" style="color: #FF0000;">Não Avaliado</p>
-          <p *ngIf="trabalho[14] === 2" style="color: #FFA500;">Em Andamento</p>
+          <p *ngIf="trabalho[14] === '3'" style="color: #32CD32;">Avaliado</p>
+          <p *ngIf="trabalho[14] === '1'" style="color: #FF0000;">Não Avaliado</p>
+          <p *ngIf="trabalho[14] === '2'" style="color: #FFA500;">Em Andamento</p>
         </ion-label>
       </ion-item>
     </ion-list>
