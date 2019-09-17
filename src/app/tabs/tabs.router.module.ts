@@ -17,11 +17,29 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'avaliadoresAusentes',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../avaliadores-ausentes/avaliadores-ausentes.module').then( m => m.AvaliadoresAusentesPageModule)
+          }
+        ]
+      },
+      {
         path: 'trabalhos',
         children: [
           {
             path: '',
-            loadChildren: () => import('../home/home.module').then( m => m.HomePageModule)
+            loadChildren: () => import('../trabalho/trabalho.module').then( m => m.TrabalhoPageModule)
+          }
+        ]
+      },
+      {
+        path: 'avaliadores',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('../avaliador/avaliador.module').then( m => m.AvaliadorPageModule)
           }
         ]
       },

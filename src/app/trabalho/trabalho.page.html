@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Trabalhos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let trabalho of trabalhosFiltered">
+      <ion-label>
+        <h3>{{trabalho[3]}}</h3>
+        <h4>{{trabalho[4]}}</h4>
+        <p>Avaliador: {{trabalho[0]}}</p>
+        <p>Data: {{trabalho[7]}} - {{trabalho[8]}}</p>
+        <p>Local: {{trabalho[9]}} {{trabalho[10]}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

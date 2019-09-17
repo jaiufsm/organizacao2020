@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Avaliadores Ausentes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding">
+    <!--Filtros-->
+    <ion-list>
+      <ion-item>
+        <ion-label>Data</ion-label>
+        <ion-select [(ngModel)]="dateModel" placeholder="Selecione uma data" (ionChange)="updateTrabalhos()">
+          <ion-select-option *ngFor="let date of dates" value="{{date}}">{{date}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Local</ion-label>
+        <ion-select [(ngModel)]="locationModel" placeholder="Selecione um local" (ionChange)="filterTrabalhos()">
+          <ion-select-option *ngFor="let location of locations" value="{{location}}">{{location}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <ion-button color="primary" expand="block" (click)="clearFilter()">Limpar filtro</ion-button>
+  </div>
+  <div class="ion-padding">
+    <ion-list>
+      <ion-item *ngFor="let avaliador of avaliadores">{{avaliador}}</ion-item>
+    </ion-list>
+  </div>
+</ion-content>

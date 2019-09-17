@@ -125,6 +125,21 @@ export class ApiJaiService {
     return avaliacoesPromise;
   }
 
+  public getTrabalhos()  {
+    const trabalhosPromise = new Promise((resolve, reject) => {
+      const params = new URLSearchParams();
+      params.append('type', 'getTrabalhos');
+      fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
+        response.json().then(jsonResponse => {
+          resolve(jsonResponse.values);
+        });
+      }, err => {
+        reject(err);
+      });
+    });
+    return trabalhosPromise;
+  }
+
 
 }
 
