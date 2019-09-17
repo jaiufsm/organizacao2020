@@ -47,7 +47,7 @@ export class HomePage implements OnInit {
     });
   }
 
-  private updateTrabalhos() {
+  public updateTrabalhos() {
     this.apiJai.getValuesByDay(this.dateModel)
     .then((response: Array<Array<string>>) => {
       console.log(response);
