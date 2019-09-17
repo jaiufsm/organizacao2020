@@ -32,7 +32,7 @@ export class ApiJaiService {
         fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
           response.json().then(jsonResponse => {
             this.daysList = jsonResponse.values;
-            console.log(this.daysList);
+            // console.log(this.daysList);
             resolve(this.daysList);
           });
         }, err => {
@@ -77,7 +77,20 @@ export class ApiJaiService {
     const body = {
       type: 'getCheck'
     };
-    return this.http.post(this.apiUrl, body);
+    const checkPromise = new Promise((resolve, reject) => {
+      const params = new URLSearchParams();
+      params.append('type', 'getCheck');
+      fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
+        response.json().then(jsonResponse => {
+          this.checkList = jsonResponse.values;
+          // console.log(this.checkList);
+          resolve(this.checkList);
+        });
+      }, err => {
+        reject(err);
+      });
+    });
+    return checkPromise;
   }
 
   public setCheck(idAvaliador: number, nomeAvaliador: string, dia: string, hora: string, checkType: string) {
@@ -102,7 +115,7 @@ export class ApiJaiService {
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
           this.avaliacoesList = jsonResponse.values;
-          console.log(this.avaliacoesList);
+          // console.log(this.avaliacoesList);
           resolve(this.avaliacoesList);
         });
       }, err => {
@@ -111,6 +124,7 @@ export class ApiJaiService {
     });
     return avaliacoesPromise;
   }
+
 
 }
 
