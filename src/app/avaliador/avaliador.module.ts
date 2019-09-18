@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AvaliadorPage } from './avaliador.page';
-import { AvaliadorModalPageModule } from '../avaliador-modal/avaliador-modal.module';
+import { AvaliadorModalPage } from '../avaliador-modal/avaliador-modal.page';
 
 const routes: Routes = [
   {
@@ -22,6 +22,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AvaliadorPage]
+  declarations: [AvaliadorPage, AvaliadorModalPage],
+  entryComponents: [AvaliadorModalPage]
 })
 export class AvaliadorPageModule {}

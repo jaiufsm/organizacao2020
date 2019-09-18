@@ -93,7 +93,7 @@ export class ApiJaiService {
     return checkPromise;
   }
 
-  public setCheck(idAvaliador: number, nomeAvaliador: string, dia: string, hora: string, checkType: string) {
+  public setCheck(idAvaliador: string, nomeAvaliador: string, dia: string, hora: string, checkType: string) {
     const body = {
       type: 'setCheck',
       idAvaliador,
@@ -102,7 +102,25 @@ export class ApiJaiService {
       hora,
       checkType
     };
-    return this.http.post(this.apiUrl, body);
+    const checkPromise = new Promise((resolve, reject) => {
+      const params = new URLSearchParams();
+      params.append('type', 'setCheck');
+      params.append('idAvaliador', idAvaliador);
+      params.append('nomeAvaliador', nomeAvaliador);
+      params.append('dia', dia);
+      params.append('hora', hora);
+      params.append('checkType', checkType);
+      fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
+        response.json().then(jsonResponse => {
+          this.checkList = jsonResponse.values;
+          // console.log(this.checkList);
+          resolve(this.checkList);
+        });
+      }, err => {
+        reject(err);
+      });
+    });
+    return checkPromise;
   }
 
   public getAvaliacoes() {
