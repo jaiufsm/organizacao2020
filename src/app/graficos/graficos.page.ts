@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
 import { GoogleChartInterface } from 'ng2-google-charts/google-charts-interfaces';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-graficos',
@@ -17,11 +18,20 @@ export class GraficosPage implements OnInit {
   public trabalhosFiltered: any = [];
   public dateModel: string;
   public locationModel: string;
+  private loading = null;
 
-  constructor(private apiJai: ApiJaiService) { }
+  constructor(private apiJai: ApiJaiService, public loadingController: LoadingController) { }
 
   ngOnInit() {
+    this.presentLoading();
     this.updateDays();
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Carregando...'
+    });
+    await this.loading.present();
   }
 
   private updateDays() {
@@ -117,6 +127,9 @@ export class GraficosPage implements OnInit {
             colors: ['#32CD32', '#FF0000']
           }
         };
+        if (this.loading) {
+          this.loading.dismiss();
+        }
       });
     });
     /* this.apiJai.getTrabalhos().subscribe( (trabalhos: Response) => {

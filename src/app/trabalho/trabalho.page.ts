@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-trabalho',
@@ -10,17 +11,29 @@ export class TrabalhoPage implements OnInit {
 
   trabalhos: Array<Array<string>>;
   trabalhosFiltered: Array<Array<string>>;
+  private loading;
 
-  constructor(private apiJai: ApiJaiService) { }
+  constructor(private apiJai: ApiJaiService, private loadingController: LoadingController) { }
 
   ngOnInit() {
+    this.presentLoading();
     this.updateTrabalhos();
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Carregando...'
+    });
+    await this.loading.present();
   }
 
   updateTrabalhos() {
     this.apiJai.getTrabalhos().then((trabalhos: Array<Array<string>>) => {
       this.trabalhos = trabalhos;
       this.trabalhosFiltered = trabalhos;
+      if (this.loading) {
+        this.loading.dismiss();
+      }
     });
   }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-avaliadores-ausentes',
@@ -15,11 +16,20 @@ export class AvaliadoresAusentesPage implements OnInit {
   public trabalhosFiltered: any = [];
   public dateModel: string;
   public locationModel: string;
+  private loading;
 
-  constructor(private apiJai: ApiJaiService) { }
+  constructor(private apiJai: ApiJaiService, private loadingController: LoadingController) { }
 
   ngOnInit() {
+    this.presentLoading();
     this.updateDays();
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Carregando...'
+    });
+    await this.loading.present();
   }
 
   private updateDays() {
@@ -68,6 +78,9 @@ export class AvaliadoresAusentesPage implements OnInit {
         .map(trabalho => trabalho[0])
         .filter((value, index, self) => self.indexOf(value) === index);
       this.avaliadores = this.shuffleArray(listaAvaliadores);
+      if (this.loading) {
+        this.loading.dismiss();
+      }
     });
   }
 

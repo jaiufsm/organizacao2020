@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
-import { ModalController } from '@ionic/angular';
+import { ModalController, LoadingController } from '@ionic/angular';
 import { AvaliadorModalPage } from '../avaliador-modal/avaliador-modal.page';
 
 @Component({
@@ -15,11 +15,20 @@ export class AvaliadorPage implements OnInit {
   avaliadoresFiltered: Array<Avaliador> = [];
   avaliacoes: Array<Array<string>> = [];
   checks: Array<Array<string>> = [];
+  private loading;
 
-  constructor(private apiJai: ApiJaiService, public modalController: ModalController) { }
+  constructor(private apiJai: ApiJaiService, public modalController: ModalController,  public loadingController: LoadingController) { }
 
   ngOnInit() {
+    this.presentLoading();
     this.updateLists();
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      message: 'Carregando...'
+    });
+    await this.loading.present();
   }
 
   updateLists() {
@@ -35,6 +44,9 @@ export class AvaliadorPage implements OnInit {
             }
           });
           this.avaliadoresFiltered = this.avaliadores;
+          if (this.loading) {
+            this.loading.dismiss();
+          }
         });
       });
     });
