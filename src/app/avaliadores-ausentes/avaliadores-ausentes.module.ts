@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AvaliadoresAusentesPage } from './avaliadores-ausentes.page';
+import { AvaliadorAusenteModalPage } from '../avaliador-ausente-modal/avaliador-ausente-modal.page';
 
 const routes: Routes = [
   {
@@ -19,8 +20,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
-  declarations: [AvaliadoresAusentesPage]
+  declarations: [AvaliadoresAusentesPage, AvaliadorAusenteModalPage],
+  entryComponents: [AvaliadorAusenteModalPage]
 })
 export class AvaliadoresAusentesPageModule {}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
+import { AvaliadorAusenteModalPage } from '../avaliador-ausente-modal/avaliador-ausente-modal.page';
 
 @Component({
   selector: 'app-avaliadores-ausentes',
@@ -9,16 +10,19 @@ import { LoadingController } from '@ionic/angular';
 })
 export class AvaliadoresAusentesPage implements OnInit {
 
-  avaliadores: Array<string> = [];
+  nomesAvaliadores: Array<string> = [];
   public dates: string[] = [];
   public locations: string[] = [];
   public trabalhos: any = [];
+  public avaliacoes: any = [];
+  public avaliadores: any = [];
+  public checks: any = [];
   public trabalhosFiltered: any = [];
   public dateModel: string;
   public locationModel: string;
   private loading;
 
-  constructor(private apiJai: ApiJaiService, private loadingController: LoadingController) { }
+  constructor(private apiJai: ApiJaiService, private loadingController: LoadingController, public modalController: ModalController) { }
 
   ngOnInit() {
     this.presentLoading();
@@ -72,15 +76,21 @@ export class AvaliadoresAusentesPage implements OnInit {
 
   updateAvaliadores() {
     this.apiJai.getCheck().then((checks: Array<Array<string>>) => {
-      checks = checks.filter(check => check[2] === this.dateModel);
-      const listaAvaliadores = this.trabalhosFiltered
-        .filter(trabalho => checks.findIndex(i => i[0] === trabalho[1]) === -1)
-        .map(trabalho => trabalho[0])
-        .filter((value, index, self) => self.indexOf(value) === index);
-      this.avaliadores = this.shuffleArray(listaAvaliadores);
-      if (this.loading) {
-        this.loading.dismiss();
-      }
+      this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<string>>) => {
+        checks = checks.filter(check => check[2] === this.dateModel);
+        this.trabalhosFiltered.map(trabalho => {
+          if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1
+          && checks.findIndex(i => i[0] === trabalho[1]) === -1) {
+            this.avaliadores.push({id: trabalho[1], nome: trabalho[0]});
+          }
+        });
+        this.checks = checks;
+        this.avaliacoes = avaliacoes;
+        this.avaliadores = this.shuffleArray(this.avaliadores);
+        if (this.loading) {
+          this.loading.dismiss();
+        }
+      });
     });
   }
 
@@ -90,6 +100,34 @@ export class AvaliadoresAusentesPage implements OnInit {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+  }
+
+  async presentAvaliador(avaliador: Avaliador) {
+    const  trabalhosAvaliador = this.trabalhosFiltered.filter(trabalho => trabalho[1] === avaliador.id);
+    for (const trabalho of trabalhosAvaliador) {
+      if (this.avaliacoes.findIndex(avaliacao => avaliacao[0] === trabalho[2]) > -1) {
+        trabalho.push('3');
+      } else if  (this.checks.findIndex(check => check[0] === avaliador.id && check[2] === trabalho[7]) > -1) {
+        trabalho.push('2');
+      } else {
+        trabalho.push('1');
+      }
+    }
+    const modal = await this.modalController.create({
+      component: AvaliadorAusenteModalPage,
+      componentProps: {
+        id: avaliador.id,
+        nome: avaliador.nome,
+        trabalhos: trabalhosAvaliador,
+        ausente: true
+      }
+    });
+    return await modal.present();
+  }
+
 }
 
+interface Avaliador {
+  id: string;
+  nome: string;
 }

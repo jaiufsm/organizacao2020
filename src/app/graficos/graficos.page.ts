@@ -106,7 +106,14 @@ export class GraficosPage implements OnInit {
           .filter((value, index, self) => value[2] === this.dateModel && self.findIndex(i => i[2] === value[2]) > -1)
           .map(check => check[0])
           .filter((value, index, self) => self.indexOf(value) === index);
+        const avaliadoresSubstitutos = checks
+          .filter((value, index, self) => value[2] === this.dateModel
+            && value[4] === 'in-sub'
+            && self.findIndex(i => i[2] === value[2]) > -1)
+          .map(check => check[0])
+          .filter((value, index, self) => self.indexOf(value) === index);
         const totalAvaliadores = avaliadores.length;
+        const totalAvaliadoresSubstitutos = avaliadoresSubstitutos.length;
         let totalAvaliadoresPresentes = 0;
         console.log(avaliadores);
         console.log('avaliadores presentes' + avaliadoresPresentes);
@@ -119,12 +126,13 @@ export class GraficosPage implements OnInit {
           chartType: 'PieChart',
           dataTable: [
             ['Check-in', 'Avaliadores'],
-            ['Efetuado', totalAvaliadoresPresentes],
+            ['Efetuado', totalAvaliadoresPresentes - totalAvaliadoresSubstitutos],
+            ['Efetuado - Substituto', totalAvaliadoresSubstitutos],
             ['Não Efetuado', totalAvaliadores - totalAvaliadoresPresentes]
           ],
           options: {
             width: 380,
-            colors: ['#32CD32', '#FF0000']
+            colors: ['#32CD32', '#033DFC', '#FF0000']
           }
         };
         if (this.loading) {

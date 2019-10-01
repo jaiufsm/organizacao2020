@@ -25,7 +25,7 @@
   </div>
   <div class="ion-padding">
     <ion-list>
-      <ion-item *ngFor="let avaliador of avaliadores">{{avaliador}}</ion-item>
+      <ion-item *ngFor="let avaliador of avaliadores" (click)="presentAvaliador(avaliador)">{{avaliador.nome}}</ion-item>
     </ion-list>
   </div>
 </ion-content>
