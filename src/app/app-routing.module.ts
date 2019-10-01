@@ -8,7 +8,8 @@ const routes: Routes = [
   { path: '', loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule)},
   { path: 'avaliadores-ausentes', loadChildren: './avaliadores-ausentes/avaliadores-ausentes.module#AvaliadoresAusentesPageModule' },
   { path: 'trabalho', loadChildren: './trabalho/trabalho.module#TrabalhoPageModule' },
-  { path: 'avaliador', loadChildren: './avaliador/avaliador.module#AvaliadorPageModule' }
+  { path: 'avaliador', loadChildren: './avaliador/avaliador.module#AvaliadorPageModule' },
+  { path: 'login', loadChildren: './login/login.module#LoginPageModule' }
 ];
 
 @NgModule({
