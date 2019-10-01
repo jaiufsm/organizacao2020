@@ -11,11 +11,17 @@ import { AvaliadorModalPage } from '../avaliador-modal/avaliador-modal.page';
 export class AvaliadorPage implements OnInit {
 
   trabalhos: Array<Array<string>> = [];
+  trabalhosFiltered: Array<Array<string>> = [];
   avaliadores: Array<Avaliador> = [];
   avaliadoresFiltered: Array<Avaliador> = [];
   avaliacoes: Array<Array<string>> = [];
   checks: Array<Array<string>> = [];
   private loading;
+  public dates: string[] = ['22/10/2018', '23/10/2018', '24/10/2018', '25/10/2018', '26/10/2018'];
+  public locations: string[] = [];
+  public dateModel = '22/10/2018';
+  public locationModel: string;
+
 
   constructor(private apiJai: ApiJaiService, public modalController: ModalController,  public loadingController: LoadingController) { }
 
@@ -31,19 +37,36 @@ export class AvaliadorPage implements OnInit {
     await this.loading.present();
   }
 
+  public filterAvaliadores() {
+    this.trabalhosFiltered = [...this.trabalhos];
+    if (this.locationModel) {
+      this.trabalhosFiltered = this.trabalhosFiltered.filter((value) => {
+        return value[9] === this.locationModel;
+      });
+    }
+    this.avaliadores = [];
+    this.trabalhosFiltered.map(trabalho => {
+      if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1) {
+        this.avaliadores.push({id: trabalho[1], nome: trabalho[0]});
+      }
+    });
+  }
+
+  public clearFilter() {
+    this.locationModel = null;
+    this.trabalhosFiltered = [...this.trabalhos];
+    this.filterAvaliadores();
+  }
+
   updateLists() {
-    this.apiJai.getTrabalhos().then((trabalhos: Array<Array<string>>) => {
+    this.apiJai.getValuesByDay(this.dateModel).then((trabalhos: Array<Array<string>>) => {
       this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<string>>) => {
         this.apiJai.getCheck().then((checks: Array<Array<string>>) => {
+          this.locations = trabalhos.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
           this.trabalhos = trabalhos;
           this.avaliacoes = avaliacoes;
           this.checks = checks;
-          trabalhos.map(trabalho => {
-            if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1) {
-              this.avaliadores.push({id: trabalho[1], nome: trabalho[0]});
-            }
-          });
-          this.avaliadoresFiltered = this.avaliadores;
+          this.filterAvaliadores();
           if (this.loading) {
             this.loading.dismiss();
           }
