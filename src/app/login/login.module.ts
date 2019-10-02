@@ -6,11 +6,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { LoginPage } from './login.page';
+import { ApiJaiService } from '../services/api-jai.service';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'login',
     component: LoginPage
+  },
+  {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
   }
 ];
 
@@ -21,6 +27,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
+  providers: [ApiJaiService],
   declarations: [LoginPage]
 })
 export class LoginPageModule {}

@@ -158,6 +158,22 @@ export class ApiJaiService {
     return trabalhosPromise;
   }
 
+  public doLogin(login: string, password: string) {
+    const loginPromise = new Promise((resolve, reject) => {
+      const params = new URLSearchParams();
+      params.append('type', 'doLogin');
+      params.append('login', login);
+      params.append('password', password);
+      fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
+        response.json().then(jsonResponse => {
+          resolve(jsonResponse);
+        });
+      }, err => {
+        reject(err);
+      });
+    });
+    return loginPromise;
+  }
 
 }
 

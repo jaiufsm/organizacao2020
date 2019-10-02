@@ -5,11 +5,10 @@ const routes: Routes = [
   // { path: '', redirectTo: 'tabs', pathMatch: 'full' },
   // { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
   // { path: 'tabs', loadChildren: './tabs/tabs.module#TabsPageModule' },
-  { path: '', loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule)},
-  { path: 'avaliadores-ausentes', loadChildren: './avaliadores-ausentes/avaliadores-ausentes.module#AvaliadoresAusentesPageModule' },
-  { path: 'trabalho', loadChildren: './trabalho/trabalho.module#TrabalhoPageModule' },
-  { path: 'avaliador', loadChildren: './avaliador/avaliador.module#AvaliadorPageModule' },
-  { path: 'login', loadChildren: './login/login.module#LoginPageModule' }
+  // { path: '', loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule)},
+  // { path: '', loadChildren: './login/login.module#LoginPageModule' }
+  { path: '', loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)},
+  { path: 'tabs', loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule)}
 ];
 
 @NgModule({
