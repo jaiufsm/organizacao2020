@@ -25,7 +25,7 @@
   </div>
   <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
   <ion-list>
-    <ion-item *ngFor="let avaliador of avaliadores" (click)="presentAvaliador(avaliador)">
+    <ion-item *ngFor="let avaliador of avaliadoresFiltered" (click)="presentAvaliador(avaliador)">
       <ion-label>
         {{avaliador.nome}}
       </ion-label>

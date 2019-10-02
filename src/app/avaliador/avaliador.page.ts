@@ -50,6 +50,7 @@ export class AvaliadorPage implements OnInit {
         this.avaliadores.push({id: trabalho[1], nome: trabalho[0]});
       }
     });
+    this.avaliadoresFiltered = [...this.avaliadores];
   }
 
   public clearFilter() {
