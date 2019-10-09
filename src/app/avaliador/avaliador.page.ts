@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
 import { ModalController, LoadingController } from '@ionic/angular';
 import { AvaliadorModalPage } from '../avaliador-modal/avaliador-modal.page';
+import { Days } from '../services/days';
 
 @Component({
   selector: 'app-avaliador',
@@ -17,13 +18,13 @@ export class AvaliadorPage implements OnInit {
   avaliacoes: Array<Array<string>> = [];
   checks: Array<Array<string>> = [];
   private loading;
-  public dates: string[] = ['22/10/2018', '23/10/2018', '24/10/2018', '25/10/2018', '26/10/2018'];
+  public dates: string[] = Days.getDays();
   public locations: string[] = [];
-  public dateModel = '22/10/2018';
+  public dateModel = Days.getCurrentDay();
   public locationModel: string;
 
 
-  constructor(private apiJai: ApiJaiService, public modalController: ModalController,  public loadingController: LoadingController) { }
+  constructor(private apiJai: ApiJaiService, public modalController: ModalController, public loadingController: LoadingController) { }
 
   ngOnInit() {
     this.presentLoading();
@@ -47,7 +48,7 @@ export class AvaliadorPage implements OnInit {
     this.avaliadores = [];
     this.trabalhosFiltered.map(trabalho => {
       if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1) {
-        this.avaliadores.push({id: trabalho[1], nome: trabalho[0]});
+        this.avaliadores.push({ id: trabalho[1], nome: trabalho[0] });
       }
     });
     this.avaliadoresFiltered = [...this.avaliadores];
@@ -84,11 +85,18 @@ export class AvaliadorPage implements OnInit {
   }
 
   async presentAvaliador(avaliador: Avaliador) {
-    const  trabalhosAvaliador = this.trabalhos.filter(trabalho => trabalho[1] === avaliador.id);
+    const trabalhosAvaliador = this.trabalhos.filter(trabalho => trabalho[1] === avaliador.id);
     for (const trabalho of trabalhosAvaliador) {
-      if (this.avaliacoes.findIndex(avaliacao => avaliacao[0] === trabalho[2]) > -1) {
-        trabalho.push('3');
-      } else if  (this.checks.findIndex(check => check[0] === avaliador.id && check[2] === trabalho[7]) > -1) {
+      const avaliacaoIndex = this.avaliacoes.findIndex(avaliacao => avaliacao[0] === trabalho[2]);
+      if (avaliacaoIndex > -1) {
+        if (this.avaliacoes[avaliacaoIndex][14] === 'av') {
+          trabalho.push('3');
+        } else if (this.avaliacoes[avaliacaoIndex][14] === 'aa') {
+          trabalho.push('4');
+        } else {
+          trabalho.push('5');
+        }
+      } else if (this.checks.findIndex(check => check[0] === avaliador.id && check[2] === trabalho[7]) > -1) {
         trabalho.push('2');
       } else {
         trabalho.push('1');

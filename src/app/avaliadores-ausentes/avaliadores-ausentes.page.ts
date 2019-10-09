@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
 import { LoadingController, ModalController } from '@ionic/angular';
 import { AvaliadorAusenteModalPage } from '../avaliador-ausente-modal/avaliador-ausente-modal.page';
+import { Days } from '../services/days';
 
 @Component({
   selector: 'app-avaliadores-ausentes',
@@ -11,14 +12,14 @@ import { AvaliadorAusenteModalPage } from '../avaliador-ausente-modal/avaliador-
 export class AvaliadoresAusentesPage implements OnInit {
 
   nomesAvaliadores: Array<string> = [];
-  public dates: string[] = [];
+  public dates: string[] = Days.getDays();
   public locations: string[] = [];
   public trabalhos: any = [];
   public avaliacoes: any = [];
   public avaliadores: any = [];
   public checks: any = [];
   public trabalhosFiltered: any = [];
-  public dateModel: string;
+  public dateModel: string = Days.getCurrentDay();
   public locationModel: string;
   private loading;
 
@@ -26,7 +27,7 @@ export class AvaliadoresAusentesPage implements OnInit {
 
   ngOnInit() {
     this.presentLoading();
-    this.updateDays();
+    this.updateTrabalhos();
   }
 
   async presentLoading() {
@@ -34,20 +35,6 @@ export class AvaliadoresAusentesPage implements OnInit {
       message: 'Carregando...'
     });
     await this.loading.present();
-  }
-
-  private updateDays() {
-    this.apiJai.getDays()
-      .then((response: Array<string>) => {
-        console.log(response);
-        if (response) {
-          this.dates = response;
-          this.dateModel = this.dates[0];
-          this.updateTrabalhos();
-        }
-      }, err => {
-        console.log(err);
-      });
   }
 
   public updateTrabalhos() {
@@ -105,8 +92,15 @@ export class AvaliadoresAusentesPage implements OnInit {
   async presentAvaliador(avaliador: Avaliador) {
     const  trabalhosAvaliador = this.trabalhosFiltered.filter(trabalho => trabalho[1] === avaliador.id);
     for (const trabalho of trabalhosAvaliador) {
-      if (this.avaliacoes.findIndex(avaliacao => avaliacao[0] === trabalho[2]) > -1) {
-        trabalho.push('3');
+      const avaliacaoIndex = this.avaliacoes.findIndex(avaliacao => avaliacao[0] === trabalho[2]);
+      if (avaliacaoIndex > -1) {
+        if (this.avaliacoes[avaliacaoIndex][14] === 'av') {
+          trabalho.push('3');
+        } else if (this.avaliacoes[avaliacaoIndex][14] === 'aa') {
+          trabalho.push('4');
+        } else {
+          trabalho.push('5');
+        }
       } else if  (this.checks.findIndex(check => check[0] === avaliador.id && check[2] === trabalho[7]) > -1) {
         trabalho.push('2');
       } else {

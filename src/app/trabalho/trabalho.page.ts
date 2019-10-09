@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
 import { LoadingController } from '@ionic/angular';
+import { Days } from '../services/days';
 
 @Component({
   selector: 'app-trabalho',
@@ -11,9 +12,9 @@ export class TrabalhoPage implements OnInit {
 
   trabalhos: Array<Array<string>>;
   trabalhosFiltered: Array<Array<string>>;
-  public dates: string[] = ['22/10/2018', '23/10/2018', '24/10/2018', '25/10/2018', '26/10/2018'];
+  public dates: string[] = Days.getDays();
   public locations: string[] = [];
-  public dateModel = '22/10/2018';
+  public dateModel = Days.getCurrentDay();
   public locationModel: string;
   private loading;
 
@@ -52,8 +53,15 @@ export class TrabalhoPage implements OnInit {
       this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<any>>) => {
         this.apiJai.getCheck().then((checks: Array<Array<any>>) => {
           for (const trabalho of trabalhos) {
-            if (avaliacoes.findIndex(avaliacao => avaliacao[0] === trabalho[2]) > -1) {
-              trabalho.push('3');
+            const avaliacaoIndex = avaliacoes.findIndex(avaliacao => avaliacao[0] === trabalho[2]);
+            if (avaliacaoIndex > -1) {
+              if (avaliacoes[avaliacaoIndex][14] === 'av') {
+                trabalho.push('3');
+              } else if (avaliacoes[avaliacaoIndex][14] === 'aa') {
+                trabalho.push('4');
+              } else {
+                trabalho.push('5');
+              }
             } else if  (checks.findIndex(check => check[0] === trabalho[1] && check[2] === trabalho[7]) > -1) {
               trabalho.push('2');
             } else {

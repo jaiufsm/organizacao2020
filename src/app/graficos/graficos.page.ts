@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiJaiService } from '../services/api-jai.service';
 import { GoogleChartInterface } from 'ng2-google-charts/google-charts-interfaces';
 import { LoadingController } from '@ionic/angular';
+import { Days } from '../services/days';
 
 @Component({
   selector: 'app-graficos',
@@ -12,11 +13,11 @@ export class GraficosPage implements OnInit {
 
   public trabalhosChart: GoogleChartInterface;
   public avaliadoresChart: GoogleChartInterface;
-  public dates: string[] = [];
+  public dates: string[] = Days.getDays();
   public locations: string[] = [];
   public trabalhos: any = [];
   public trabalhosFiltered: any = [];
-  public dateModel: string;
+  public dateModel: string = Days.getCurrentDay();
   public locationModel: string;
   private loading = null;
 
@@ -24,7 +25,7 @@ export class GraficosPage implements OnInit {
 
   ngOnInit() {
     this.presentLoading();
-    this.updateDays();
+    this.updateTrabalhos();
   }
 
   async presentLoading() {
@@ -32,20 +33,6 @@ export class GraficosPage implements OnInit {
       message: 'Carregando...'
     });
     await this.loading.present();
-  }
-
-  private updateDays() {
-    this.apiJai.getDays()
-      .then((response: Array<string>) => {
-        console.log(response);
-        if (response) {
-          this.dates = response;
-          this.dateModel = this.dates[0];
-          this.updateTrabalhos();
-        }
-      }, err => {
-        console.log(err);
-      });
   }
 
   public updateTrabalhos() {
