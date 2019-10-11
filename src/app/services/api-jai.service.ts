@@ -175,6 +175,21 @@ export class ApiJaiService {
     return loginPromise;
   }
 
+  public getLoginAvaliador() {
+    const loginAvaliadorPromise = new Promise((resolve, reject) => {
+      const params = new URLSearchParams();
+      params.append('type', 'getLoginAvaliador');
+      fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
+        response.json().then(jsonResponse => {
+          resolve(jsonResponse.values);
+        });
+      }, err => {
+        reject(err);
+      });
+    });
+    return loginAvaliadorPromise;
+  }
+
 }
 
 interface GetDaysResponse {

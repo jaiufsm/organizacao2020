@@ -21,8 +21,6 @@ export class TrabalhoPage implements OnInit {
   constructor(private apiJai: ApiJaiService, private loadingController: LoadingController) { }
 
   ngOnInit() {
-    this.presentLoading();
-    this.dateModel = this.dates[0];
     this.updateTrabalhos();
   }
 
@@ -48,6 +46,7 @@ export class TrabalhoPage implements OnInit {
   }
 
   updateTrabalhos() {
+    this.presentLoading();
     this.apiJai.getValuesByDay(this.dateModel).then((trabalhos: Array<Array<string>>) => {
       this.locations = trabalhos.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
       this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<any>>) => {

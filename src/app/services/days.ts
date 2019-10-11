@@ -1,5 +1,5 @@
 export class Days {
-    static daysList: Array<string> = ['22/10/2018', '23/10/2018', '24/10/2018', '25/10/2018', '26/10/2018'];
+    static daysList: Array<string> = ['21/10/2019', '22/10/2019', '23/10/2019', '24/10/2019', '25/10/2019'];
 
     public static getDays() {
         return Days.daysList;

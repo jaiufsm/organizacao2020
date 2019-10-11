@@ -17,6 +17,7 @@ export class AvaliadorPage implements OnInit {
   avaliadoresFiltered: Array<Avaliador> = [];
   avaliacoes: Array<Array<string>> = [];
   checks: Array<Array<string>> = [];
+  loginAvaliadores: any = [];
   private loading;
   public dates: string[] = Days.getDays();
   public locations: string[] = [];
@@ -27,7 +28,6 @@ export class AvaliadorPage implements OnInit {
   constructor(private apiJai: ApiJaiService, public modalController: ModalController, public loadingController: LoadingController) { }
 
   ngOnInit() {
-    this.presentLoading();
     this.updateLists();
   }
 
@@ -48,7 +48,8 @@ export class AvaliadorPage implements OnInit {
     this.avaliadores = [];
     this.trabalhosFiltered.map(trabalho => {
       if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1) {
-        this.avaliadores.push({ id: trabalho[1], nome: trabalho[0] });
+        const senha = this.loginAvaliadores.filter(login => login[0] === trabalho[1]);
+        this.avaliadores.push({ id: trabalho[1], nome: trabalho[0], senha: senha[0][1] });
       }
     });
     this.avaliadoresFiltered = [...this.avaliadores];
@@ -61,17 +62,21 @@ export class AvaliadorPage implements OnInit {
   }
 
   updateLists() {
+    this.presentLoading();
     this.apiJai.getValuesByDay(this.dateModel).then((trabalhos: Array<Array<string>>) => {
       this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<string>>) => {
         this.apiJai.getCheck().then((checks: Array<Array<string>>) => {
-          this.locations = trabalhos.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
-          this.trabalhos = trabalhos;
-          this.avaliacoes = avaliacoes;
-          this.checks = checks;
-          this.filterAvaliadores();
-          if (this.loading) {
-            this.loading.dismiss();
-          }
+          this.apiJai.getLoginAvaliador().then((loginAvaliador: Array<Array<string>>) => {
+            this.locations = trabalhos.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
+            this.trabalhos = trabalhos;
+            this.avaliacoes = avaliacoes;
+            this.checks = checks;
+            this.loginAvaliadores = loginAvaliador;
+            this.filterAvaliadores();
+            if (this.loading) {
+              this.loading.dismiss();
+            }
+          });
         });
       });
     });
@@ -107,6 +112,7 @@ export class AvaliadorPage implements OnInit {
       componentProps: {
         id: avaliador.id,
         nome: avaliador.nome,
+        senha: avaliador.senha,
         trabalhos: trabalhosAvaliador
       }
     });
@@ -118,4 +124,5 @@ export class AvaliadorPage implements OnInit {
 interface Avaliador {
   id: string;
   nome: string;
+  senha: string;
 }

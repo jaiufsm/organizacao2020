@@ -11,6 +11,7 @@ export class AvaliadorModalPage implements OnInit {
 
   @Input() id: string;
   @Input() nome: string;
+  @Input() senha: string;
   @Input() trabalhos: Array<Array<string>>;
   private loading;
 

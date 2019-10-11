@@ -24,7 +24,6 @@ export class GraficosPage implements OnInit {
   constructor(private apiJai: ApiJaiService, public loadingController: LoadingController) { }
 
   ngOnInit() {
-    this.presentLoading();
     this.updateTrabalhos();
   }
 
@@ -36,6 +35,7 @@ export class GraficosPage implements OnInit {
   }
 
   public updateTrabalhos() {
+    this.presentLoading();
     this.apiJai.getValuesByDay(this.dateModel).then((trabalhos: Array<Array<string>>) => {
       this.locations = trabalhos.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
       this.trabalhos = trabalhos;

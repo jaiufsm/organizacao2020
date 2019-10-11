@@ -18,6 +18,7 @@ export class AvaliadoresAusentesPage implements OnInit {
   public avaliacoes: any = [];
   public avaliadores: any = [];
   public checks: any = [];
+  public loginAvaliadores: any = [];
   public trabalhosFiltered: any = [];
   public dateModel: string = Days.getCurrentDay();
   public locationModel: string;
@@ -26,7 +27,6 @@ export class AvaliadoresAusentesPage implements OnInit {
   constructor(private apiJai: ApiJaiService, private loadingController: LoadingController, public modalController: ModalController) { }
 
   ngOnInit() {
-    this.presentLoading();
     this.updateTrabalhos();
   }
 
@@ -38,6 +38,7 @@ export class AvaliadoresAusentesPage implements OnInit {
   }
 
   public updateTrabalhos() {
+    this.presentLoading();
     this.apiJai.getValuesByDay(this.dateModel).then((trabalhos: Array<Array<string>>) => {
       this.locations = trabalhos.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
       this.trabalhos = trabalhos;
@@ -64,19 +65,22 @@ export class AvaliadoresAusentesPage implements OnInit {
   updateAvaliadores() {
     this.apiJai.getCheck().then((checks: Array<Array<string>>) => {
       this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<string>>) => {
-        checks = checks.filter(check => check[2] === this.dateModel);
-        this.trabalhosFiltered.map(trabalho => {
-          if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1
-          && checks.findIndex(i => i[0] === trabalho[1]) === -1) {
-            this.avaliadores.push({id: trabalho[1], nome: trabalho[0]});
+        this.apiJai.getLoginAvaliador().then((loginAvaliadores: Array<Array<string>>) => {
+          checks = checks.filter(check => check[2] === this.dateModel);
+          this.trabalhosFiltered.map(trabalho => {
+            if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1
+            && checks.findIndex(i => i[0] === trabalho[1]) === -1) {
+              const senhaAvaliador = loginAvaliadores.filter(login => login[0] === trabalho[1]);
+              this.avaliadores.push({id: trabalho[1], nome: trabalho[0], senha: senhaAvaliador[0][1]});
+            }
+          });
+          this.checks = checks;
+          this.avaliacoes = avaliacoes;
+          this.avaliadores = this.shuffleArray(this.avaliadores);
+          if (this.loading) {
+            this.loading.dismiss();
           }
         });
-        this.checks = checks;
-        this.avaliacoes = avaliacoes;
-        this.avaliadores = this.shuffleArray(this.avaliadores);
-        if (this.loading) {
-          this.loading.dismiss();
-        }
       });
     });
   }
@@ -112,6 +116,7 @@ export class AvaliadoresAusentesPage implements OnInit {
       componentProps: {
         id: avaliador.id,
         nome: avaliador.nome,
+        senha: avaliador.senha,
         trabalhos: trabalhosAvaliador,
         ausente: true
       }
@@ -124,4 +129,5 @@ export class AvaliadoresAusentesPage implements OnInit {
 interface Avaliador {
   id: string;
   nome: string;
+  senha: string;
 }
