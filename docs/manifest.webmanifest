@@ -1,0 +1,16 @@
+{
+  "name": "Organiza Jai",
+  "short_name": "Organiza Jai",
+  "theme_color": "#204c90",
+  "background_color": "#fafafa",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "assets/ufsm.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
