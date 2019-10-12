@@ -17,17 +17,20 @@ export class AvaliadoresAusentesPage implements OnInit {
   public trabalhos: any = [];
   public avaliacoes: any = [];
   public avaliadores: any = [];
+  public avaliadoresFiltered: any = [];
   public checks: any = [];
   public loginAvaliadores: any = [];
   public trabalhosFiltered: any = [];
+  public modules: string[] = [];
   public dateModel: string = Days.getCurrentDay();
   public locationModel: string;
+  public moduleModel: string;
   private loading;
 
   constructor(private apiJai: ApiJaiService, private loadingController: LoadingController, public modalController: ModalController) { }
 
   ngOnInit() {
-    this.updateTrabalhos();
+    this.updateLists();
   }
 
   async presentLoading() {
@@ -37,52 +40,57 @@ export class AvaliadoresAusentesPage implements OnInit {
     await this.loading.present();
   }
 
-  public updateTrabalhos() {
+  updateLists() {
     this.presentLoading();
     this.apiJai.getValuesByDay(this.dateModel).then((trabalhos: Array<Array<string>>) => {
-      this.locations = trabalhos.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
-      this.trabalhos = trabalhos;
-      this.filterTrabalhos();
+      this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<string>>) => {
+        this.apiJai.getCheck().then((checks: Array<Array<string>>) => {
+          this.apiJai.getLoginAvaliador().then((loginAvaliador: Array<Array<string>>) => {
+            this.locations = trabalhos.map(value => value[9]).filter((value, index, self) => self.indexOf(value) === index).sort();
+            this.modules = trabalhos.map(value => value[12]).filter((value, index, self) => self.indexOf(value) === index).sort();
+            this.trabalhos = trabalhos;
+            this.avaliacoes = avaliacoes;
+            this.checks = checks;
+            this.loginAvaliadores = loginAvaliador;
+            this.filterAvaliadores();
+            if (this.loading) {
+              this.loading.dismiss();
+            }
+          });
+        });
+      });
     });
   }
 
-  public filterTrabalhos() {
+  public filterAvaliadores() {
     this.trabalhosFiltered = [...this.trabalhos];
     if (this.locationModel) {
       this.trabalhosFiltered = this.trabalhosFiltered.filter((value) => {
         return value[9] === this.locationModel;
       });
     }
-    this.updateAvaliadores();
+    if (this.moduleModel) {
+      this.trabalhosFiltered = this.trabalhosFiltered.filter((value) => {
+        return value[12] === this.moduleModel;
+      });
+    }
+    this.avaliadores = [];
+    this.trabalhosFiltered.map(trabalho => {
+      if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1
+            && this.checks.findIndex(i => i[0] === trabalho[1]) === -1) {
+        const senha = this.loginAvaliadores.filter(login => login[0] === trabalho[1]);
+        this.avaliadores.push({ id: trabalho[1], nome: trabalho[0], senha: senha[0][1] });
+      }
+    });
+    this.avaliadoresFiltered = [...this.avaliadores];
+    this.shuffleArray(this.avaliadoresFiltered);
   }
+
 
   public clearFilter() {
     this.locationModel = null;
+    this.moduleModel = null;
     this.trabalhosFiltered = [...this.trabalhos];
-  }
-
-
-  updateAvaliadores() {
-    this.apiJai.getCheck().then((checks: Array<Array<string>>) => {
-      this.apiJai.getAvaliacoes().then((avaliacoes: Array<Array<string>>) => {
-        this.apiJai.getLoginAvaliador().then((loginAvaliadores: Array<Array<string>>) => {
-          checks = checks.filter(check => check[2] === this.dateModel);
-          this.trabalhosFiltered.map(trabalho => {
-            if (this.avaliadores.findIndex(avaliador => avaliador.id === trabalho[1]) === -1
-            && checks.findIndex(i => i[0] === trabalho[1]) === -1) {
-              const senhaAvaliador = loginAvaliadores.filter(login => login[0] === trabalho[1]);
-              this.avaliadores.push({id: trabalho[1], nome: trabalho[0], senha: senhaAvaliador[0][1]});
-            }
-          });
-          this.checks = checks;
-          this.avaliacoes = avaliacoes;
-          this.avaliadores = this.shuffleArray(this.avaliadores);
-          if (this.loading) {
-            this.loading.dismiss();
-          }
-        });
-      });
-    });
   }
 
   shuffleArray(array) {
