@@ -4,8 +4,8 @@
   "theme_color": "#204c90",
   "background_color": "#fafafa",
   "display": "standalone",
-  "scope": "/",
-  "start_url": "/",
+  "scope": "/organizacao2019/",
+  "start_url": "/organizacao2019/",
   "icons": [
     {
       "src": "assets/ufsm.png",
