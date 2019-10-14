@@ -29,6 +29,10 @@ export class ApiJaiService {
       } else {
         const params = new URLSearchParams();
         params.append('type', 'getDays');
+        const token = localStorage.getItem('token');
+        if (token != null) {
+          params.append('token', token);
+        }
         fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
           response.json().then(jsonResponse => {
             this.daysList = jsonResponse.values;
@@ -56,6 +60,10 @@ export class ApiJaiService {
         const params = new URLSearchParams();
         params.append('type', 'getValuesByDay');
         params.append('day', day);
+        const token = localStorage.getItem('token');
+        if (token != null) {
+          params.append('token', token);
+        }
         fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
           response.json().then(jsonResponse => {
             const trabalhoList: ListaTrabalhos = {
@@ -80,6 +88,10 @@ export class ApiJaiService {
     const checkPromise = new Promise((resolve, reject) => {
       const params = new URLSearchParams();
       params.append('type', 'getCheck');
+      const token = localStorage.getItem('token');
+      if (token != null) {
+        params.append('token', token);
+      }
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
           this.checkList = jsonResponse.values;
@@ -110,6 +122,10 @@ export class ApiJaiService {
       params.append('dia', dia);
       params.append('hora', hora);
       params.append('checkType', checkType);
+      const token = localStorage.getItem('token');
+      if (token != null) {
+        params.append('token', token);
+      }
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
           this.checkList = jsonResponse.values;
@@ -130,6 +146,10 @@ export class ApiJaiService {
     const avaliacoesPromise = new Promise((resolve, reject) => {
       const params = new URLSearchParams();
       params.append('type', 'getAvaliacoes');
+      const token = localStorage.getItem('token');
+      if (token != null) {
+        params.append('token', token);
+      }
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
           this.avaliacoesList = jsonResponse.values;
@@ -147,6 +167,10 @@ export class ApiJaiService {
     const trabalhosPromise = new Promise((resolve, reject) => {
       const params = new URLSearchParams();
       params.append('type', 'getTrabalhos');
+      const token = localStorage.getItem('token');
+      if (token != null) {
+        params.append('token', token);
+      }
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
           resolve(jsonResponse.values);
@@ -166,6 +190,8 @@ export class ApiJaiService {
       params.append('password', password);
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
+          const token = jsonResponse.token;
+          localStorage.setItem('token', token);
           resolve(jsonResponse);
         });
       }, err => {
@@ -179,6 +205,10 @@ export class ApiJaiService {
     const loginAvaliadorPromise = new Promise((resolve, reject) => {
       const params = new URLSearchParams();
       params.append('type', 'getLoginAvaliador');
+      const token = localStorage.getItem('token');
+      if (token != null) {
+        params.append('token', token);
+      }
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
           resolve(jsonResponse.values);
