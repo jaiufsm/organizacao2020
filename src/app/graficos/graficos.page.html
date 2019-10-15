@@ -1,6 +1,14 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Gráficos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="updateTrabalhos()">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+      <ion-button (click)="apiJai.doLogout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ApiJaiService {
   avaliacoesList: Array<Avaliacao> = [];
   checkList: Array<Array<string>> = [];
 
-  constructor(public http: HttpClient) {  }
+  constructor(public http: HttpClient, private router: Router) {  }
 
   /*public getTrabalhos() {
     return this.http.get('https://script.google.com/macros/s/AKfycbxpJbyxvF35U08UFWRmZAGXCMrrGBLd3sl130pHZu3f5CqwjjMw/exec');
@@ -199,6 +200,11 @@ export class ApiJaiService {
       });
     });
     return loginPromise;
+  }
+
+  public doLogout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 
   public getLoginAvaliador() {

@@ -1,6 +1,14 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Avaliadores Ausentes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="updateLists()">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+      <ion-button (click)="apiJai.doLogout()">
+        <ion-icon slot="icon-only" name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,7 +30,8 @@
       </ion-item>
       <ion-item>
         <ion-label>Módulo</ion-label>
-        <ion-select interface="action-sheet" [(ngModel)]="moduleModel" placeholder="Selecione um módulo" (ionChange)="filterAvaliadores()">
+        <ion-select interface="action-sheet" [(ngModel)]="moduleModel" placeholder="Selecione um módulo"
+          (ionChange)="filterAvaliadores()">
           <ion-select-option *ngFor="let module of modules" value="{{module}}">{{module}}</ion-select-option>
         </ion-select>
       </ion-item>
@@ -31,7 +40,8 @@
   </div>
   <div class="ion-padding">
     <ion-list>
-      <ion-item *ngFor="let avaliador of avaliadoresFiltered" (click)="presentAvaliador(avaliador)">{{avaliador.nome}}</ion-item>
+      <ion-item *ngFor="let avaliador of avaliadoresFiltered" (click)="presentAvaliador(avaliador)">{{avaliador.nome}}
+      </ion-item>
     </ion-list>
   </div>
 </ion-content>

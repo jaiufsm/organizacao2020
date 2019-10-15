@@ -25,7 +25,10 @@ export class AvaliadorPage implements OnInit {
   public locationModel: string;
 
 
-  constructor(private apiJai: ApiJaiService, public modalController: ModalController, public loadingController: LoadingController) { }
+  constructor(
+    private apiJai: ApiJaiService,
+    public modalController: ModalController,
+    public loadingController: LoadingController) { }
 
   ngOnInit() {
     this.updateLists();
