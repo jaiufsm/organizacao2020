@@ -26,7 +26,7 @@ export class AvaliadorPage implements OnInit {
 
 
   constructor(
-    private apiJai: ApiJaiService,
+    public apiJai: ApiJaiService,
     public modalController: ModalController,
     public loadingController: LoadingController) { }
 

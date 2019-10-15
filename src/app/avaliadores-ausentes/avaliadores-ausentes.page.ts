@@ -27,7 +27,7 @@ export class AvaliadoresAusentesPage implements OnInit {
   public moduleModel: string;
   private loading;
 
-  constructor(private apiJai: ApiJaiService, private loadingController: LoadingController, public modalController: ModalController) { }
+  constructor(public apiJai: ApiJaiService, private loadingController: LoadingController, public modalController: ModalController) { }
 
   ngOnInit() {
     this.updateLists();

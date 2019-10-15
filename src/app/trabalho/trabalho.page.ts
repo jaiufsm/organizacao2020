@@ -18,7 +18,7 @@ export class TrabalhoPage implements OnInit {
   public locationModel: string;
   private loading;
 
-  constructor(private apiJai: ApiJaiService, private loadingController: LoadingController) { }
+  constructor(public apiJai: ApiJaiService, private loadingController: LoadingController) { }
 
   ngOnInit() {
     this.updateTrabalhos();

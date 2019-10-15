@@ -21,7 +21,7 @@ export class GraficosPage implements OnInit {
   public locationModel: string;
   private loading = null;
 
-  constructor(private apiJai: ApiJaiService, public loadingController: LoadingController) { }
+  constructor(public apiJai: ApiJaiService, public loadingController: LoadingController) { }
 
   ngOnInit() {
     this.updateTrabalhos();
