@@ -22,7 +22,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Módulo</ion-label>
-        <ion-select [(ngModel)]="moduleModel" placeholder="Selecione um módulo" (ionChange)="filterAvaliadores()">
+        <ion-select interface="action-sheet" [(ngModel)]="moduleModel" placeholder="Selecione um módulo" (ionChange)="filterAvaliadores()">
           <ion-select-option *ngFor="let module of modules" value="{{module}}">{{module}}</ion-select-option>
         </ion-select>
       </ion-item>

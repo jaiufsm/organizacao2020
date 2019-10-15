@@ -52,6 +52,10 @@ export class AvaliadoresAusentesPage implements OnInit {
             this.avaliacoes = avaliacoes;
             this.checks = checks;
             this.loginAvaliadores = loginAvaliador;
+            const locationIndex = this.locations.findIndex(location => location === 'Centro de Convenções');
+            if (locationIndex > -1) {
+              this.locationModel = this.locations[locationIndex];
+            }
             this.filterAvaliadores();
             if (this.loading) {
               this.loading.dismiss();

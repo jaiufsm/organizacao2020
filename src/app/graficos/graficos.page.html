@@ -23,20 +23,28 @@
     </ion-list>
     <ion-button color="primary" expand="block" (click)="clearFilter()">Limpar filtro</ion-button>
   </div>
-  <ion-card class="welcome-card">
-    <ion-card-header>
-      <ion-card-title>Trabalhos Avaliados</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <google-chart [data]="trabalhosChart"></google-chart>
-    </ion-card-content>
-  </ion-card>
-  <ion-card class="welcome-card">
-    <ion-card-header>
-      <ion-card-title>Check-in Avaliadores</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <google-chart [data]="avaliadoresChart"></google-chart>
-    </ion-card-content>
-  </ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card class="welcome-card">
+          <ion-card-header>
+            <ion-card-title>Trabalhos Avaliados</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <google-chart [data]="trabalhosChart"></google-chart>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card class="welcome-card">
+          <ion-card-header>
+            <ion-card-title>Check-in Avaliadores</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <google-chart [data]="avaliadoresChart"></google-chart>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

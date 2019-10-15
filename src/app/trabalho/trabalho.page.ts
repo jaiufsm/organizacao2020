@@ -68,6 +68,10 @@ export class TrabalhoPage implements OnInit {
             }
           }
           this.trabalhos = trabalhos;
+          const locationIndex = this.locations.findIndex(location => location === 'Centro de Convenções');
+          if (locationIndex > -1) {
+            this.locationModel = this.locations[locationIndex];
+          }
           this.filterTrabalhos();
           if (this.loading) {
             this.loading.dismiss();
