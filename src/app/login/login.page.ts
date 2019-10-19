@@ -41,6 +41,7 @@ export class LoginPage implements OnInit {
       if (this.loading) {
         this.loading.dismiss();
       }
+      this.presentAlert('Tente novamente');
     });
   }
 

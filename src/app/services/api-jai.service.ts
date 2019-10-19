@@ -39,6 +39,8 @@ export class ApiJaiService {
             this.daysList = jsonResponse.values;
             // console.log(this.daysList);
             resolve(this.daysList);
+          }, err => {
+            reject(err);
           });
         }, err => {
           reject(err);
@@ -73,6 +75,8 @@ export class ApiJaiService {
             };
             this.trabalhosList.push(trabalhoList);
             resolve(trabalhoList.trabalhos);
+          }, err => {
+            reject(err);
           });
         }, err => {
           reject(err);
@@ -98,6 +102,8 @@ export class ApiJaiService {
           this.checkList = jsonResponse.values;
           // console.log(this.checkList);
           resolve(this.checkList);
+        }, err => {
+          reject(err);
         });
       }, err => {
         reject(err);
@@ -132,6 +138,8 @@ export class ApiJaiService {
           this.checkList = jsonResponse.values;
           // console.log(this.checkList);
           resolve(this.checkList);
+        }, err => {
+          reject(err);
         });
       }, err => {
         reject(err);
@@ -156,6 +164,8 @@ export class ApiJaiService {
           this.avaliacoesList = jsonResponse.values;
           // console.log(this.avaliacoesList);
           resolve(this.avaliacoesList);
+        }, err => {
+          reject(err);
         });
       }, err => {
         reject(err);
@@ -175,6 +185,8 @@ export class ApiJaiService {
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
           resolve(jsonResponse.values);
+        }, err => {
+          reject(err);
         });
       }, err => {
         reject(err);
@@ -194,6 +206,8 @@ export class ApiJaiService {
           const token = jsonResponse.token;
           localStorage.setItem('token', token);
           resolve(jsonResponse);
+        }, err => {
+          reject(err);
         });
       }, err => {
         reject(err);
@@ -218,6 +232,8 @@ export class ApiJaiService {
       fetch(this.apiUrl, {method: 'POST', redirect: 'follow', body: params}).then(response => {
         response.json().then(jsonResponse => {
           resolve(jsonResponse.values);
+        }, err => {
+          reject(err);
         });
       }, err => {
         reject(err);
