@@ -50,7 +50,7 @@ export class AvaliadorModalPage implements OnInit {
         if (this.loading) {
           this.loading.dismiss();
         }
-      } else if (type === 'out' && avaliadorChecks.findIndex(check => check[4] === 'in') < 0) {
+      } else if (type === 'out' && avaliadorChecks.findIndex(check => check[4] === 'in' || check[4] === 'in-sub') < 0) {
         this.presentAlert('Check-in ainda não realizado', type);
         if (this.loading) {
           this.loading.dismiss();
