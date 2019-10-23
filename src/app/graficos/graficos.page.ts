@@ -68,10 +68,11 @@ export class GraficosPage implements OnInit {
         let avaliados = 0;
         let naoAvaliados = 0;
         let emAndamento = 0;
+        const checksDia = checks.filter(check => check[2] === this.dateModel);
         this.trabalhosFiltered.map(trabalho => {
           if (avaliacoes.findIndex(avaliacao => avaliacao[0] === trabalho[2]) > -1) {
             avaliados += 1;
-          } else if (checks.findIndex(check => check[0] === trabalho[1]) > -1) {
+          } else if (checksDia.findIndex(check => check[0] === trabalho[1]) > -1) {
             emAndamento += 1;
           } else {
             naoAvaliados += 1;
@@ -90,36 +91,35 @@ export class GraficosPage implements OnInit {
             colors: ['#32CD32', '#FF0000', '#FFA500']
           }
         };
-        const avaliadores = this.trabalhosFiltered
-          .map(trabalho => trabalho[1])
-          .filter((value, index, self) => self.indexOf(value) === index);
-        const avaliadoresPresentes = checks
-          .filter((value, index, self) => value[2] === this.dateModel && self.findIndex(i => i[2] === value[2]) > -1)
-          .map(check => check[0])
-          .filter((value, index, self) => self.indexOf(value) === index);
-        const avaliadoresSubstitutos = checks
-          .filter((value, index, self) => value[2] === this.dateModel
-            && value[4] === 'in-sub'
-            && self.findIndex(i => i[2] === value[2]) > -1)
-          .map(check => check[0])
-          .filter((value, index, self) => self.indexOf(value) === index);
-        const totalAvaliadores = avaliadores.length;
-        const totalAvaliadoresSubstitutos = avaliadoresSubstitutos.length;
-        let totalAvaliadoresPresentes = 0;
-        console.log(avaliadores);
-        console.log('avaliadores presentes' + avaliadoresPresentes);
-        avaliadoresPresentes.map(avaliador => {
-          if (avaliadores.indexOf(avaliador) > -1) {
-            totalAvaliadoresPresentes += 1;
+        checksDia.map(check => {
+          const index = this.trabalhosFiltered
+            .findIndex(trabalho => trabalho[1] === check[0]);
+          if (index > -1) {
+            check.push(this.trabalhosFiltered[index][9]);
           }
         });
+        const avaliadores = this.trabalhosFiltered
+          .map(trabalho => trabalho[1])
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .length;
+        const avaliadoresPresentes = checksDia
+          .filter((value, index, self) => value[5] === this.locationModel)
+          .map(check => check[0])
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .length;
+        const avaliadoresSubstitutos = checksDia
+          .filter((value, index, self) => value[5] === this.locationModel
+            && value[4] === 'in-sub')
+          .map(check => check[0])
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .length;
         this.avaliadoresChart = {
           chartType: 'PieChart',
           dataTable: [
             ['Check-in', 'Avaliadores'],
-            ['Efetuado', totalAvaliadoresPresentes - totalAvaliadoresSubstitutos],
-            ['Efetuado - Substituto', totalAvaliadoresSubstitutos],
-            ['Não Efetuado', totalAvaliadores - totalAvaliadoresPresentes]
+            ['Efetuado', avaliadoresPresentes - avaliadoresSubstitutos],
+            ['Efetuado - Substituto', avaliadoresSubstitutos],
+            ['Não Efetuado', avaliadores - avaliadoresPresentes]
           ],
           options: {
             width: 380,
