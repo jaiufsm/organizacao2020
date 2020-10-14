@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class ApiJaiService {
 
-  apiUrl = 'https://script.google.com/macros/s/AKfycbzdEAUndj-OtgytCTu59HZn2xOefjB9kOTEHjTDms6UQ8hpLX0/exec';
+  apiUrl = 'https://script.google.com/macros/s/AKfycbyk7ohDB0YxOmRIxWL3msAARpwaL2bJ4F3YFzLzmB_5ybO3Pc1X/exec';
   daysList: Array<string> = [];
   trabalhosList: Array<ListaTrabalhos> = [];
   avaliacoesList: Array<Avaliacao> = [];
